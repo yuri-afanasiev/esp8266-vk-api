@@ -27,6 +27,7 @@ public:
 	int likes, comments, reposts, views;
 	int like_photo;
 	int messages_new;
+	int participants;
 	int error;
 	String  last_message;
 	WiFiClientSecure client_vk;
@@ -62,7 +63,7 @@ public:
 			reposts = root["response"][0]["reposts"]["count"];//информация о репостах записи 
 			views = root["response"][0]["views"]["count"];//информация о просмотрах записи
 	    	}
-
+	 client_vk.stop();
 	}
 	void like(String object_type,  int owner_id,  int item_id) {
 		       //https://vk.com/dev/likes.getList  
@@ -101,6 +102,7 @@ public:
 			JsonObject& root = likeBuffer.parseObject(line);
 			like_photo = root["response"]["count"];
 		  }
+	  client_vk.stop();
 	}
 	void message(int id_vk, String token, String message) {
 		// Отправляет сообщение https://vk.com/dev/messages.send
@@ -125,6 +127,7 @@ public:
 				error = 1;
 			}
 		}
+		client_vk.stop();
 	} 
 	void message(int id_vk, String token, int message) {
 		// Отправляет сообщение https://vk.com/dev/messages.send
@@ -149,6 +152,7 @@ public:
 				error = 1;
 			}
 		}
+		client_vk.stop();
 	}
 	void new_messages(String token) {
 		//https://vk.com/dev/account.getCounters
@@ -178,6 +182,7 @@ public:
 			JsonObject& root = vkBuffer.parseObject(line);
 			messages_new = root["response"]["messages"];
 		}
+		client_vk.stop();
 	}
 	void history_messages(int id_vk, String token) {
 		// Возвращает историю сообщений https://vk.com/dev/messages.getHistory    
@@ -210,8 +215,41 @@ public:
 		String last_messagew = root["response"]["items"][0]["body"];
 		last_message = last_messagew;
 		}
+		client_vk.stop();
 	}
-      
+
+	void group(int group_id) {
+		 //https://vk.com/dev/groups.getMembers
+		 //group_id       id группы 
+                                
+		String url = "/method/groups.getMembers?";
+		url += "group_id=";
+		url +=  group_id;
+		url += "&count=1&v=5.37";
+		if (!client_vk.connect(host_vk, httpsPort)) {
+			error = 1;
+		}
+		else {
+			error = 0;
+			if (client_vk.verify(fingerprint_vk, host_vk)) {
+				client_vk.print(String("GET ") + url + " HTTP/1.1\r\n" +
+					"Host: " + host_vk + "\r\n" +
+					"Connection: close\r\n\r\n");
+			}
+			else {
+				error = 1;
+			}
+		}
+		delay(500);
+		while (client_vk.available()) {
+			line = client_vk.readStringUntil('\r');
+			DynamicJsonBuffer  likeBuffer;
+
+			JsonObject& root = likeBuffer.parseObject(line);
+			participants = root["response"]["count"];
+		}
+		client_vk.stop();
+	}
  
 };
 
