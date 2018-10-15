@@ -18,7 +18,11 @@
 
 const char* ssid = "";// ssid wifi
 const char* password = ""; //  Пароль wifi   
-   
+String access_token = "";// 1.Чтобы получить токен нужно перейти по ссылке https://vk.cc/7iEJnf 
+                              // 2. Нажимаем разрешить
+                              // 3.  После чего перенаправляет на страницу
+                              // 4. oauth.vk.com/blank.html#access_token=код который тут будет надо вставить в поле access_token &expires_in=0
+  
 VkApi api; 
  
 void setup() {
@@ -29,7 +33,7 @@ void setup() {
            delay(500);
            Serial.print(".");
           }  
-        
+      api.token(access_token);     
       api.users_online(" ");
      
       Serial.println("users");

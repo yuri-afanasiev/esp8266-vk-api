@@ -22,13 +22,15 @@
 
 
 const char* ssid = "";// ssid wifi
-const char* password = ""; //  Пароль wifi   
+const char* password = ""; //  Пароль wifi 
+String host  = "";//адрес сервера где будет файл vk.php Например esptest.esy.es или 192.168.1.170  
+String url  = "";//путь к файлу vk.php Например /vk/vk.php
 String access_token = "";// 1.Чтобы получить токен нужно перейти по ссылке https://vk.cc/7iEJnf 
                               // 2. Нажимаем разрешить
                               // 3.  После чего перенаправляет на страницу
                               // 4. oauth.vk.com/blank.html#access_token=код который тут будет надо вставить в поле access_token &expires_in=0
    
-VkApi api; 
+vk_api_host api; 
  
 void setup() {
     Serial.begin(115200);  
@@ -37,7 +39,10 @@ void setup() {
     while (WiFi.status() != WL_CONNECTED) {
            delay(500);
            Serial.print(".");
-          }  
+          } 
+          
+    api.server(host);
+    api.url(url);
     api.token(access_token);    
     api.like("photo",-126750524,456239024); //https://vk.com/photo-126750524_456239024 
     

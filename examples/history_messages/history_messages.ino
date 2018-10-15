@@ -1,7 +1,7 @@
 /*  
       
        Последнее сообщение от пользователя Vk
-       api.history_messages(id пользователя, access_token);
+       api.history_messages(id пользователя);
 
        Возвращаемая информация    
        api.last_message   Возвращает последнее сообщение от пользователя (String)
@@ -17,7 +17,7 @@
 
 const char* ssid = ""; 
 const char* password = "";    
-const char* access_token = "";// 1.Чтобы получить токен нужно перейти по ссылке https://vk.cc/7iEJnf 
+String access_token = "";// 1.Чтобы получить токен нужно перейти по ссылке https://vk.cc/7iEJnf 
                               // 2. Нажимаем разрешить
                               // 3.  После чего перенаправляет на страницу
                               // 4. oauth.vk.com/blank.html#access_token=код который тут будет надо вставить в поле access_token &expires_in=0
@@ -31,9 +31,10 @@ void setup() {
            delay(500);
            Serial.print(".");
           }  
+          
+        api.token(access_token);
+        api.history_messages(id пользователя);
         
-       api.history_messages(id пользователя, access_token);
-       
        Serial.println("last message"); 
        Serial.println(api.last_message);//Возвращает последнее сообщение от пользователя 
 }
