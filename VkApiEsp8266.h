@@ -28,15 +28,19 @@ public:
 	int online;
 	int error;
 	String  last_message;
+	String  access_token;
 	WiFiClientSecure client_vk;
 
-	
+	void token(String tokenn) {
+		 access_token = tokenn;
+	}
 	void wall(String id) {
 		//https://vk.com/dev/wall.getById
 		String url = "/method/wall.getById?posts=";
 		url += id;
 		url += "&v=5.68";
-
+		url += "&access_token=";
+		url += access_token;
 		if (!client_vk.connect(host_vk, httpsPort)) {
 			error = 1;
 		   }
@@ -78,6 +82,8 @@ public:
 		url += "&item_id=";
 		url += item_id;
 		url += "&count=2&&v=5.68";
+		url += "&access_token=";
+		url += access_token;
 		if (!client_vk.connect(host_vk, httpsPort)) {
 			error = 1;
 		}
@@ -102,7 +108,7 @@ public:
 		  }
 	  client_vk.stop();
 	}
-	void message(int id_vk, String token, String message) {
+	void message(int id_vk, String message) {
 		// Отправляет сообщение https://vk.com/dev/messages.send
 
 		String url = "/method/messages.send?user_id=";
@@ -110,7 +116,7 @@ public:
 		url += "&message=";
 		url += message;
 		url += "&v=5.37&access_token=";
-		url += token;
+		url += access_token;
 		if (!client_vk.connect(host_vk, httpsPort)) {
 			error = 1;
 		}
@@ -127,7 +133,7 @@ public:
 		}
 		//client_vk.stop();
 	} 
-	void message(int id_vk, String token, int message) {
+	void message(int id_vk, int message) {
 		// Отправляет сообщение https://vk.com/dev/messages.send
 
 		String url = "/method/messages.send?user_id=";
@@ -135,7 +141,8 @@ public:
 		url += "&message=";
 		url += message;
 		url += "&v=5.37&access_token=";
-		url += token;
+		url += access_token;
+
 		if (!client_vk.connect(host_vk, httpsPort)) {
 			error = 1;
 		}
@@ -152,11 +159,11 @@ public:
 		}
 		client_vk.stop();
 	}
-	void new_messages(String token) {
+	void new_messages() {
 		//https://vk.com/dev/account.getCounters
 
-		String url = "/method/account.getCounters?filter=messages&v=5.68&access_token=";
-		url += token;
+		String url = "/method/account.getCounters?filter=messages&v=5.68&access_token=";\
+		url += access_token;
 
 		if (!client_vk.connect(host_vk, httpsPort)) {
 			error = 1;
@@ -182,13 +189,13 @@ public:
 		}
 		client_vk.stop();
 	}
-	void history_messages(int id_vk, String token) {
+	void history_messages(int id_vk) {
 		// Возвращает историю сообщений https://vk.com/dev/messages.getHistory    
 
 		String url = "/method/messages.getHistory?count=1&user_id=";
 		url += id_vk;
 		url += "&v=5.37&access_token=";
-		url += token;
+		url += access_token;
 
 		if (!client_vk.connect(host_vk, httpsPort)) {
 			error = 1;
@@ -224,6 +231,8 @@ public:
 		url += "group_id=";
 		url +=  group_id;
 		url += "&count=1&v=5.37";
+		url += "&access_token=";
+		url += access_token;
 		if (!client_vk.connect(host_vk, httpsPort)) {
 			error = 1;
 		}
@@ -257,6 +266,8 @@ public:
 		url += "user_ids=";
 		url += users;
 		url += "&fields=online&name_case=Nom&v=5.69";
+		url += "&access_token=";
+		url += access_token;
 		if (!client_vk.connect(host_vk, httpsPort)) {
 			error = 1;
 		}
@@ -304,6 +315,7 @@ public:
 	int participants;
 	int error;
 	String  last_message;
+	String  access_token;
 	WiFiClient  client_vk_host;
 
 	void server(String host) {
@@ -313,11 +325,16 @@ public:
 	void url(String host) {
 		wurl = host;
 	}
+	void token(String tokenn) {
+		access_token = tokenn;
+	}
 	void wall(String id) {
 		String url = wurl;
 		url += "?id=";
 		url += id;
 		url += "&ri=30";
+		url += "&access_token=";
+		url += access_token;
 		 
 
 		if (client_vk_host.connect(host_vk.c_str(), httpPort)) {
@@ -357,6 +374,8 @@ public:
 		url += "&type=";
 		url += object_type;
 		url += "&ri=31";
+		url += "&access_token=";
+		url += access_token;
 
 
 		if (client_vk_host.connect(host_vk.c_str(), httpPort)) {
@@ -388,6 +407,8 @@ public:
 		url += "?group_id=";
 		url += group_id;
 		url += "&ri=32";
+		url += "&access_token=";
+		url += access_token;
 
 
 		if (client_vk_host.connect(host_vk.c_str(), httpPort)) {
@@ -409,12 +430,12 @@ public:
 	}
 
 
-	void new_messages(String token) {
+	void new_messages() {
 		//https://vk.com/dev/account.getCounters
 
 		String url = wurl;
-		url += "?token=";
-		url += token;
+		url += "?access_token=";
+		url += access_token;
 		url += "&ri=33";
 
 
